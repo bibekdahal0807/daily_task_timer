@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { supabase } from '../supabase';
 import './TaskItem.css';
 
 const getTodayStr = () => {
@@ -84,9 +85,18 @@ function TaskItem({ task, tasks, setTasks, mode }) {
     ));
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (window.confirm(`Delete task "${task.name}"?`)) {
-      setTasks(tasks.filter(t => t.id !== task.id));
+      const { error } = await supabase
+        .from('tasks')
+        .delete()
+        .eq('id', task.id);
+      
+      if (error) {
+        console.error('Error deleting task:', error.message);
+      } else {
+        setTasks(tasks.filter(t => t.id !== task.id));
+      }
     }
   };
 
