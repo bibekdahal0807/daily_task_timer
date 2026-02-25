@@ -1,0 +1,104 @@
+.task-card {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 350px;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.delete-btn:hover {
+  color: #ff4444;
+  background-color: rgba(255, 68, 68, 0.1);
+}
+
+.timer-box {
+  background-color: #111;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.timer-main {
+  font-family: 'Courier New', monospace;
+  font-size: 36px;
+  font-weight: 700;
+  color: #00ff99;
+  line-height: 1;
+}
+
+.timer-ms {
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  color: #00ff99;
+  text-align: right;
+  margin-top: 4px;
+  opacity: 0.7;
+}
+
+.button-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.action-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.start-btn {
+  background-color: #00ff99;
+  color: #0f0f0f;
+}
+
+.start-btn:hover:not(:disabled) {
+  background-color: #00cc7a;
+}
+
+.stop-btn {
+  background-color: #333;
+  color: #fff;
+}
+
+.stop-btn:hover:not(:disabled) {
+  background-color: #444;
+}

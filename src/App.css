@@ -1,0 +1,62 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  background-color: #0f0f0f;
+  color: #ffffff;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.main-layout {
+  display: flex;
+  gap: 24px;
+  flex: 1;
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.calendar-section {
+  flex: 0 0 35%;
+}
+
+.task-section-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 1024px) {
+  .main-layout {
+    flex-direction: column;
+  }
+  
+  .calendar-section {
+    flex: 1;
+  }
+}
+
+.future-message {
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  color: #ff6b6b;
+  font-size: 16px;
+}
