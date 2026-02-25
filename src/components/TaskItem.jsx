@@ -11,7 +11,7 @@ const isToday = (dateStr) => {
   return dateStr === getTodayStr();
 };
 
-function TaskItem({ task, tasks, setTasks, mode }) {
+function TaskItem({ task, tasks, setTasks, mode, currentUserId }) {
   const [displayTime, setDisplayTime] = useState(task.totalTime);
 
   useEffect(() => {
@@ -90,7 +90,8 @@ function TaskItem({ task, tasks, setTasks, mode }) {
       const { error } = await supabase
         .from('tasks')
         .delete()
-        .eq('id', task.id);
+        .eq('id', task.id)
+        .eq('user_id', currentUserId);
       
       if (error) {
         console.error('Error deleting task:', error.message);

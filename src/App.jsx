@@ -22,11 +22,19 @@ const isFuture = (dateStr) => {
   return dateStr > getTodayStr();
 };
 
+const OWNER_SECRET = "murari-2026-focus";
+const OWNER_ID = "murari-private";
+const PUBLIC_ID = "public-demo";
+
 function App() {
   const [currentDay, setCurrentDay] = useState(getTodayStr());
   const [selectedDate, setSelectedDate] = useState(getTodayStr());
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const params = new URLSearchParams(window.location.search);
+  const isOwner = params.get("owner") === OWNER_SECRET;
+  const currentUserId = isOwner ? OWNER_ID : PUBLIC_ID;
 
   // Load tasks from Supabase on mount
   useEffect(() => {
@@ -35,6 +43,7 @@ function App() {
         const { data, error } = await supabase
           .from('tasks')
           .select('*')
+          .eq('user_id', currentUserId)
           .order('date', { ascending: false });
         
         if (error) throw error;
@@ -57,7 +66,7 @@ function App() {
       }
     };
     loadTasks();
-  }, []);
+  }, [currentUserId]);
 
   // Save tasks to Supabase whenever they change
   useEffect(() => {
@@ -73,7 +82,8 @@ function App() {
               name: task.name,
               date: task.date,
               total_time: Math.floor((task.totalTime || 0) / 1000),
-              cycles: task.cycles || []
+              cycles: task.cycles || [],
+              user_id: currentUserId
             }, { onConflict: 'id' });
           
           if (error) throw error;
@@ -83,7 +93,7 @@ function App() {
       }
     };
     saveTasks();
-  }, [tasks, loading]);
+  }, [tasks, loading, currentUserId]);
 
   useEffect(() => {
     const checkMidnight = setInterval(() => {
@@ -127,7 +137,8 @@ function App() {
               name: task.name,
               date: task.date,
               total_time: Math.floor(task.totalTime / 1000),
-              cycles: task.cycles || []
+              cycles: task.cycles || [],
+              user_id: currentUserId
             }, { onConflict: 'id' });
         }
       } catch (error) {
@@ -137,7 +148,7 @@ function App() {
 
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [tasks]);
+  }, [tasks, currentUserId]);
 
   const getMode = () => {
     if (isToday(selectedDate)) return 'today';
@@ -180,7 +191,8 @@ function App() {
               tasks={tasks} 
               setTasks={setTasks} 
               mode={mode} 
-              selectedDate={selectedDate} 
+              selectedDate={selectedDate}
+              currentUserId={currentUserId}
             />
           )}
         </div>

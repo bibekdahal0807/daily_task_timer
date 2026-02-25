@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import TaskItem from './TaskItem';
+import { supabase } from '../supabase';
 import './TaskSection.css';
 
 const getTodayStr = () => {
@@ -11,7 +12,7 @@ const isToday = (dateStr) => {
   return dateStr === getTodayStr();
 };
 
-function TaskSection({ tasks, setTasks, mode, selectedDate }) {
+function TaskSection({ tasks, setTasks, mode, selectedDate, currentUserId }) {
   const [showInput, setShowInput] = useState(false);
   const [taskInput, setTaskInput] = useState('');
 
@@ -35,7 +36,7 @@ function TaskSection({ tasks, setTasks, mode, selectedDate }) {
     }, 0);
   };
 
-  const addTask = () => {
+  const addTask = async () => {
     if (!isToday(selectedDate)) {
       return;
     }
@@ -49,9 +50,25 @@ function TaskSection({ tasks, setTasks, mode, selectedDate }) {
         lastStartedAt: null,
         cycles: []
       };
-      setTasks([...tasks, newTask]);
-      setTaskInput('');
-      setShowInput(false);
+      
+      const { error } = await supabase
+        .from('tasks')
+        .insert([{
+          id: newTask.id,
+          name: newTask.name,
+          date: newTask.date,
+          total_time: 0,
+          cycles: [],
+          user_id: currentUserId
+        }]);
+      
+      if (error) {
+        console.error('Error adding task:', error.message);
+      } else {
+        setTasks([...tasks, newTask]);
+        setTaskInput('');
+        setShowInput(false);
+      }
     }
   };
 
@@ -87,7 +104,7 @@ function TaskSection({ tasks, setTasks, mode, selectedDate }) {
       
       <div className="task-list">
         {filteredTasks.map(task => (
-          <TaskItem key={task.id} task={task} tasks={tasks} setTasks={setTasks} mode={mode} />
+          <TaskItem key={task.id} task={task} tasks={tasks} setTasks={setTasks} mode={mode} currentUserId={currentUserId} />
         ))}
       </div>
 
